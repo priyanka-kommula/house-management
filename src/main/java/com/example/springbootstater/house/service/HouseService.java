@@ -6,6 +6,7 @@ import com.example.springbootstater.house.repository.HouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -106,8 +107,14 @@ public class HouseService {
     }
 
 
-    public List<House> getAllHouses() {
-        List<HouseEntity> houseEntities = (List<HouseEntity>) houseRepository.findAll();
+    public List<House> getAllHouses(String type) {
+        List<HouseEntity> houseEntities = new ArrayList<>();
+        if(type == null){
+            houseEntities = (List<HouseEntity>) houseRepository.findAll();
+        }else {
+            houseEntities = houseRepository.findBYType(type);
+        }
+
         List<House> houses = houseEntities.stream().map(this::convertFromEntityToHouse).toList();
         return houses;
 

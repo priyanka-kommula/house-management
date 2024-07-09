@@ -22,18 +22,18 @@ public class HouseController {
     }
 
     @DeleteMapping("/houses/{id}")
-    public String deleteHouse(@PathVariable int id){
+    public @ResponseBody String deleteHouse(@PathVariable int id){
        houseService.deleteById(id);
        return "success";
-    }
-    @GetMapping("/houses")
-    public @ResponseBody List<House> getAllHouses(){
-
-        return houseService.getAllHouses();
     }
     @GetMapping("/houses/{id}")
     public @ResponseBody House getById(@PathVariable int id){
         return houseService.getById(id);
     }
+    @GetMapping("/houses")
+    public @ResponseBody List<House> getAllHouses(@RequestParam(value = "type", required = false) String type){
+        return houseService.getAllHouses(type);
+    }
+
 
 }
