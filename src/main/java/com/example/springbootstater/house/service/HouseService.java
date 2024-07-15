@@ -23,8 +23,16 @@ public class HouseService {
        return house;
 
     }
+    public List<House> addHouses(List<House> houses) {
 
-    private static HouseEntity createHouseEntity(House house) {
+        List<HouseEntity> houseEntities = houses.stream().map(this::createHouseEntity).toList();
+
+        houseEntities = (List<HouseEntity>) houseRepository.saveAll(houseEntities);
+
+        return houseEntities.stream().map(this::convertFromEntityToHouse).toList();
+    }
+
+    private HouseEntity createHouseEntity(House house) {
         HouseEntity houseEntity = new HouseEntity();
 
         houseEntity.setAreaOfTheHouse(house.getAreaOfTheHouse());
@@ -107,13 +115,22 @@ public class HouseService {
     }
 
 
-    public List<House> getAllHouses(String type) {
+    public List<House> getAllHouses(String type, Integer price) {
         List<HouseEntity> houseEntities = new ArrayList<>();
-        if(type == null){
+        if(type == null && price == null){
             houseEntities = (List<HouseEntity>) houseRepository.findAll();
-        }else {
+        }
+        else if(price != null && type == null) {
+            houseEntities = houseRepository.findBYPrice(price);
+
+        }
+        else if(price == null && type != null) {
             houseEntities = houseRepository.findBYType(type);
         }
+        else{
+            houseEntities = houseRepository.findBYPriceAndType(type,price);
+        }
+
 
         List<House> houses = houseEntities.stream().map(this::convertFromEntityToHouse).toList();
         return houses;
@@ -175,4 +192,6 @@ public class HouseService {
 
         return house;
     }
+
+
 }

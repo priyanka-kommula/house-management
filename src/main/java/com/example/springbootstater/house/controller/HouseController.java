@@ -12,9 +12,13 @@ import java.util.List;
 public class HouseController {
     @Autowired
     private HouseService houseService;
-    @PostMapping("/houses")
+    @PostMapping("/house")
     public @ResponseBody House addHouse(@RequestBody House house){
        return houseService.addHouse(house);
+    }
+    @PostMapping("/houses")
+    public @ResponseBody List<House> addHouses(@RequestBody List<House> houses){
+        return  houseService.addHouses(houses);
     }
     @PutMapping("/houses/{id}")
     public @ResponseBody House updateHouse(@RequestBody House house, @PathVariable int id){
@@ -31,8 +35,8 @@ public class HouseController {
         return houseService.getById(id);
     }
     @GetMapping("/houses")
-    public @ResponseBody List<House> getAllHouses(@RequestParam(value = "type", required = false) String type){
-        return houseService.getAllHouses(type);
+    public @ResponseBody List<House> getAllHouses(@RequestParam(value = "type",required = false) String type, @RequestParam(value = "price",required = false) Integer price){
+        return houseService.getAllHouses(type,price);
     }
 
 
